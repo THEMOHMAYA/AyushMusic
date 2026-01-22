@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: shruti-music
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: |
+      apt-get update && apt-get install -y ffmpeg
+      pip install -r requirements.txt
+    startCommand: python3 -m AyushMusic
+    autoDeploy: true
+
+    envVars:
+      API_ID: 
+        value: 29448785
+      API_HASH: 
+        value: 599574f6aff0a09ebb76305b58e7e9c2
+      API_KEY:
+        sync: false
+      BOT_TOKEN:
+        sync: false
+      MONGO_DB_URI: 
+        value: mongodb+srv://pusers:nycreation@nycreation.pd4klp1.mongodb.net/?retryWrites=true&w=majority&appName=NYCREATION
+      OWNER_ID:
+        value: 5311223486
+      OWNER_USERNAME:
+        value: MOH_MAYA_OFFICIAL
+      BOT_USERNAME:
+        value: Spotify_x_music_bot
+      UPSTREAM_REPO:
+        value: https://github.com/tmmteam/AyushMusic
+      STRING_SESSION:
+        sync: false
+      GIT_TOKEN:
+        sync: false
+      HEROKU_API_KEY:
+        sync: false
+      HEROKU_APP_NAME:
+        sync: false
+      LOG_GROUP_ID:
+        value: -1002321189618
+      SUPPORT_GROUP:
+        value: https://t.me/tmm_support_chat
+      SUPPORT_CHANNEL:
+        value: https://t.me/FrozenTools 
+      INSTAGRAM:
+        value: https://instagram.com/aayu__tech
+      YOUTUBE:
+        value: https://youtube.com/@aayuXtech
+      GITHUB:
+        value: https://github.com/THEMOHMAYA
+      START_IMG_URL:
+        sync: false

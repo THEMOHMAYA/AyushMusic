@@ -1,0 +1,119 @@
+{
+  "name": "Ayush Music",
+  "description": "A Telegram Music Player Bot, written in Python with Pyrogram and Py-Tgcalls.",
+  "logo": "https://files.catbox.moe/v7hio8.jpg",
+  "keywords": [
+    "python3",
+    "telegram",
+    "bot",
+    "FrozenTools",
+    "MusicBot",
+    "telegram-bot",
+    "pyrogram"
+  ],
+  "env": {
+    "API_ID": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": "22243185",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": "39d926a67155f59b722db787a23893ac",
+      "required": true
+    },
+    "BOT_TOKEN": {
+      "description": "A Bot's token from Botfather",
+      "value": "",
+      "required": true
+    },
+    "MONGO_DB_URI": {
+      "description": "Get a mongodb url from https://cloud.mongodb.com.",
+      "value": "",
+      "required": true
+    },
+    "OWNER_ID": {
+      "description": "The user id of user whom you would like to add as OWNER.",
+      "value": "5311223486",
+      "required": true
+    },
+    "BOT_USERNAME": {
+      "description": "The username of your bot (without @)",
+      "value": "Spotify_x_music_bot",
+      "required": true
+    },
+    "UPSTREAM_REPO": {
+      "description": "URL of your GitHub repository",
+      "value": "",
+      "required": false
+    },
+    "STRING_SESSION": {
+      "description": "A Pyrogram v2 String Session from Replit.",
+      "value": "",
+      "required": true
+    },
+    "GIT_TOKEN": {
+      "description": "Your GitHub personal access token (if needed for private repos)",
+      "value": "",
+      "required": false
+    },
+    "HEROKU_API_KEY": {
+      "description": "Your Heroku account's API key",
+      "value": "",
+      "required": false
+    },
+    "HEROKU_APP_NAME": {
+      "description": "Your heroku app name",
+      "value": "",
+      "required": false
+    },
+    "LOG_GROUP_ID": {
+      "description": "Your Log Group ID, add your bot and promote as an admin with full rights!. Do not ever try to put channel ID here.",
+      "value": "",
+      "required": true
+    },
+    "SUPPORT_GROUP": {
+      "description": "Your support group link",
+      "value": "https://t.me/tmm_support_chat",
+      "required": false
+    },
+    "SUPPORT_CHANNEL": {
+      "description": "Your support channel link",
+      "value": "https://t.me/FrozenTools",
+      "required": false
+    },
+    "INSTAGRAM": {
+      "description": "Your Instagram profile link or Any Link",
+      "value": "https://instagram.com/aayu__tech",
+      "required": false
+    },
+    "YOUTUBE": {
+      "description": "Your YouTube channel link or Any Link",
+      "value": "https://youtube.com/@aayuXtech",
+      "required": false
+    },
+    "GITHUB": {
+      "description": "Your GitHub profile link or Any Link",
+      "value": "https://github.com/THEMOHMAYA",
+      "required": false
+    },
+    
+    "START_IMG_URL": {
+      "description": "Image that appears with the /start command",
+      "value": "https://i.ibb.co/Xfj9XLX5/file-3854.png",
+      "required": false
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    }
+  ],
+  "stack": "container"
+}
