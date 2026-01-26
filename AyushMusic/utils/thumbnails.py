@@ -319,4 +319,4 @@ async def gen_qthumb(videoid, user_id):
         return f"cache/que{videoid}_{user_id}.png"
     except Exception as e:
         LOGGER.error(e)
-        return FAILED
+        return None
