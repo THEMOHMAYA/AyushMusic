@@ -5,7 +5,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from AyushMusic import app
-from AyushMusic.core.call import Nand
+from AyushMusic.core.call import Aru
 
 welcome = 20
 close = 30
