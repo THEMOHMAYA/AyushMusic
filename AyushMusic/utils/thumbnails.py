@@ -1,17 +1,13 @@
-
 import os
-import re
-import textwrap
-
-import aiofiles
+import random
 import aiohttp
-import numpy as np
-from PIL import Image, ImageChops, ImageDraw, ImageEnhance, ImageFilter, ImageFont
+import aiofiles
+import traceback
+from pathlib import Path
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageEnhance
 from py_yt import VideosSearch
-
-from config import FAILED
-from AyushMusic import BOT_ID, LOGGER, app
-
+from AyushMusic import app
+import math
 
 def changeImageSize(maxWidth, maxHeight, image):
     widthRatio = maxWidth / image.size[0]
