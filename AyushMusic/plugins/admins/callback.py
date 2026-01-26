@@ -25,7 +25,7 @@ from AyushMusic.utils.formatters import seconds_to_min
 from AyushMusic.utils.inline import close_markup, stream_markup, stream_markup_timer
 from AyushMusic.utils.inline.help import help_pannel_page1, help_pannel_page2, help_pannel_page3, help_pannel_page4
 from AyushMusic.utils.stream.autoclear import auto_clean
-from AyushMusic.utils.thumbnails import gen_thumb
+from AyushMusic.utils.thumbnails import get_thumb
 from config import (
     BANNED_USERS,
     SOUNCLOUD_IMG_URL,
@@ -444,7 +444,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 return await CallbackQuery.message.reply_text(_["call_6"])
             
             button = stream_markup(_, chat_id)
-            img = await gen_thumb(videoid)
+            img = await get_thumb(videoid)
             run = await CallbackQuery.message.reply_photo(
                 photo=img,
                 caption=_["stream_1"].format(
@@ -484,7 +484,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 return await mystic.edit_text(_["call_6"])
             
             button = stream_markup(_, chat_id)
-            img = await gen_thumb(videoid)
+            img = await get_thumb(videoid)
             run = await CallbackQuery.message.reply_photo(
                 photo=img,
                 caption=_["stream_1"].format(
@@ -562,7 +562,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             
             else:
                 button = stream_markup(_, chat_id)
-                img = await gen_thumb(videoid)
+                img = await get_thumb(videoid)
                 run = await CallbackQuery.message.reply_photo(
                     photo=img,
                     caption=_["stream_1"].format(
