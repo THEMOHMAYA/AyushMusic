@@ -1,7 +1,7 @@
 import random
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from ShrutiMusic import app
+from AyushMusic import app
 import asyncio
 
 GALI = [
