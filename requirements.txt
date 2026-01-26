@@ -6,6 +6,7 @@ asyncio
 beautifulsoup4
 dnspython
 ffmpeg-python
+gpytranslate
 gitpython
 hachoir
 heroku3
@@ -31,4 +32,5 @@ youtube-search
 youtube-search-python
 py-yt-search
 yt-dlp
+
 
