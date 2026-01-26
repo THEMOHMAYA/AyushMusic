@@ -8,6 +8,3 @@ from .pastebin import *
 from .sys import *
 from .error import *
 from .couple import *
-from .thumbnails import *
-
-
