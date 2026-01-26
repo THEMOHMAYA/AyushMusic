@@ -35,7 +35,7 @@ from AyushMusic.utils.exceptions import AssistantErr
 from AyushMusic.utils.formatters import check_duration, seconds_to_min, speed_converter
 from AyushMusic.utils.inline.play import stream_markup
 from AyushMusic.utils.stream.autoclear import auto_clean
-from AyushMusic.utils.thumbnails import gen_thumb
+from AyushMusic.utils.thumbnails import get_thumb
 from strings import get_string
 
 autoend = {}
