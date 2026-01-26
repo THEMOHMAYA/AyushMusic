@@ -4,11 +4,11 @@ from datetime import datetime
 from pyrogram import filters
 from pyrogram.types import Message
 
-from ShrutiMusic import app
-from ShrutiMusic.core.call import Aru
-from ShrutiMusic.utils import bot_sys_stats
-from ShrutiMusic.utils.decorators.language import language
-from ShrutiMusic.utils.inline import supp_markup
+from AyushMusic import app
+from AyushMusic.core.call import Aru
+from AyushMusic.utils import bot_sys_stats
+from AyushMusic.utils.decorators.language import language
+from AyushMusic.utils.inline import supp_markup
 from config import BANNED_USERS, PING_IMG_URL
 
 
