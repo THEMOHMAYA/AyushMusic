@@ -44,7 +44,7 @@
     },
     "UPSTREAM_REPO": {
       "description": "URL of your GitHub repository",
-      "value": "",
+      "value": "https://github.com/THEMOHMAYA/AyushMusic",
       "required": false
     },
     "STRING_SESSION": {
