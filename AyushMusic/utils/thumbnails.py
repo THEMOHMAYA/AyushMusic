@@ -1,166 +1,82 @@
 import os
-import re
-import textwrap
-import random
-
 import aiofiles
 import aiohttp
-from PIL import Image, ImageDraw, ImageEnhance, ImageOps, ImageFilter, ImageFont
-from unidecode import unidecode
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 from py_yt import VideosSearch
 
-from AyushMusic import app
 from config import YOUTUBE_IMG_URL
-
-
-def changeImageSize(maxWidth, maxHeight, image):
-    widthRatio = maxWidth / image.size[0]
-    heightRatio = maxHeight / image.size[1]
-    newWidth = int(widthRatio * image.size[0])
-    newHeight = int(heightRatio * image.size[1])
-    newImage = image.resize((newWidth, newHeight))
-    return newImage
-
-
-def clear(text):
-    list = text.split(" ")
-    title = ""
-    for i in list:
-        if len(title) + len(i) < 60:
-            title += " " + i
-    return title.strip()
-
-
-def get_random_color():
-    return (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), 255)
 
 
 async def get_thumb(videoid):
     if os.path.isfile(f"cache/{videoid}.png"):
         return f"cache/{videoid}.png"
 
-    url = f"https://www.youtube.com/watch?v={videoid}"
     try:
+        url = f"https://www.youtube.com/watch?v={videoid}"
         results = VideosSearch(url, limit=1)
-        for result in (await results.next())["result"]:
-            try:
-                title = result["title"]
-                title = re.sub("\W+", " ", title)
-                title = title.title()
-            except:
-                title = "Unsupported Title"
-            try:
-                duration = result["duration"]
-            except:
-                duration = "Unknown Mins"
-            thumbnail = result["thumbnails"][0]["url"].split("?")[0]
-            try:
-                views = result["viewCount"]["short"]
-            except:
-                views = "Unknown Views"
-            try:
-                channel = result["channel"]["name"]
-            except:
-                channel = "Unknown Channel"
 
+        for r in (await results.next())["result"]:
+            duration = r.get("duration", "0:00")
+            thumb = r["thumbnails"][0]["url"].split("?")[0]
+
+        # ===== Download thumbnail =====
         async with aiohttp.ClientSession() as session:
-            async with session.get(thumbnail) as resp:
-                if resp.status == 200:
-                    f = await aiofiles.open(f"cache/thumb{videoid}.png", mode="wb")
-                    await f.write(await resp.read())
-                    await f.close()
+            async with session.get(thumb) as resp:
+                f = await aiofiles.open(f"cache/raw_{videoid}.jpg", "wb")
+                await f.write(await resp.read())
+                await f.close()
 
-        youtube = Image.open(f"cache/thumb{videoid}.png")
-        bg = Image.open(f"AyushMusic/assets/dil.png")
-        image1 = changeImageSize(1280, 720, youtube)
-        image2 = image1.convert("RGBA")
-        background = image2.filter(filter=ImageFilter.BoxBlur(9))
-        enhancer = ImageEnhance.Brightness(background)
-        background = enhancer.enhance(0.5)
+        yt = Image.open(f"cache/raw_{videoid}.jpg").convert("RGBA")
+        yt = yt.resize((1280, 720))
 
-        image3 = changeImageSize(1280, 720, bg)
-        image5 = image3.convert("RGBA")
-        Image.alpha_composite(background, image5).save(f"cache/temp{videoid}.png")
+        # ===== BLUR BACKGROUND =====
+        bg = yt.filter(ImageFilter.GaussianBlur(25))
+        bg = ImageEnhance.Brightness(bg).enhance(0.45)
 
-        Xcenter = youtube.width / 2
-        Ycenter = youtube.height / 2
-        x1 = Xcenter - 250
-        y1 = Ycenter - 250
-        x2 = Xcenter + 250
-        y2 = Ycenter + 250
+        # ===== WHITE CARD =====
+        card_w, card_h = 900, 460
+        card = Image.new("RGBA", (card_w, card_h), (255, 255, 255, 255))
 
-        logo = youtube.crop((x1, y1, x2, y2))
-        logo.thumbnail((360, 360), Image.Resampling.LANCZOS)
+        mask = Image.new("L", (card_w, card_h), 0)
+        m = ImageDraw.Draw(mask)
+        m.rounded_rectangle((0, 0, card_w, card_h), 35, fill=255)
 
-        border_size = 13
-        border_color = get_random_color()
+        # ===== INNER THUMBNAIL =====
+        inner_thumb = yt.resize((860, 300))
+        card.paste(inner_thumb, (20, 20))
 
-        bordered_logo = Image.new("RGBA", (logo.width + 2 * border_size, logo.height + 2 * border_size), (0, 0, 0, 0))
-        bordered_logo.paste(logo, (border_size, border_size))
+        draw = ImageDraw.Draw(card)
 
-        draw = ImageDraw.Draw(bordered_logo)
-        draw.rectangle(
-            [(0, 0), (bordered_logo.width - 1, bordered_logo.height - 1)],
-            outline=border_color,
-            width=border_size
+        # ===== FONTS =====
+        font = ImageFont.truetype("AyushMusic/assets/font.ttf", 26)
+
+        # ===== PLAYER LINE =====
+        line_y = 350
+        draw.line((60, line_y, 840, line_y), fill=(180, 180, 180), width=4)
+        draw.ellipse((250, line_y - 7, 266, line_y + 7), fill="black")
+
+        draw.text((60, 370), "00:00", fill="black", font=font)
+        draw.text((780, 370), duration, fill="black", font=font)
+
+        # ===== COMPOSE =====
+        bg.paste(card, (190, 110), mask)
+
+        # ===== POWERED BY TEXT =====
+        final_draw = ImageDraw.Draw(bg)
+        power_font = ImageFont.truetype("AyushMusic/assets/font.ttf", 28)
+        final_draw.text(
+            (640, 610),
+            "Powered by AYUSH",
+            fill=(220, 220, 220),
+            anchor="mm",
+            font=power_font,
         )
 
-        background.paste(bordered_logo, (750, 160), bordered_logo)
-        background.paste(image3, (0, 0), mask=image3)
+        bg.save(f"cache/{videoid}.png")
+        os.remove(f"cache/raw_{videoid}.jpg")
 
-        draw = ImageDraw.Draw(background)
-        font = ImageFont.truetype("AyushMusic/assets/font2.ttf", 45)
-        font2 = ImageFont.truetype("AyushMusic/assets/font2.ttf", 70)
-        arial = ImageFont.truetype("AyushMusic/assets/font2.ttf", 30)
-        name_font = ImageFont.truetype("AyushMusic/assets/font.ttf", 30)
-        para = textwrap.wrap(title, width=30)
-        j = 0
-        draw.text((5, 5), f"SYSTEM MUSIC", fill="white", font=name_font)
-        for line in para:
-            if j == 1:
-                j += 1
-                draw.text(
-                    (60, 260),
-                    f"{line}",
-                    fill="white",
-                    stroke_width=1,
-                    stroke_fill="white",
-                    font=font,
-                )
-            if j == 0:
-                j += 1
-                draw.text(
-                    (60, 210),
-                    f"{line}",
-                    fill="white",
-                    stroke_width=1,
-                    stroke_fill="white",
-                    font=font,
-                )
-        draw.text(
-            (20, 675),
-            f"{channel} | {views[:23]}",
-            (255, 255, 255),
-            font=arial,
-        )
-        draw.text(
-            (60, 400),
-            "00:00",
-            (255, 255, 255),
-            font=arial,
-        )
-        draw.text(
-            (610, 400),
-            f"{duration[:23]}",
-            (255, 255, 255),
-            font=arial,
-        )
-        try:
-            os.remove(f"cache/thumb{videoid}.png")
-        except:
-            pass
-        background.save(f"cache/{videoid}.png")
         return f"cache/{videoid}.png"
+
     except Exception as e:
         print(e)
         return YOUTUBE_IMG_URL
